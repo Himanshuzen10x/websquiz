@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Series Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+#quiz-container {
+    margin-bottom: 20px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    text-align: center;
+    margin-top: 20px;
+}
+#category-selector {
+    margin-bottom: 20px;
+}
+
+#category-selector select {
+    padding: 10px;
+    font-size: 16px;
+}
+
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div id="user-info">
+        <h1>Web Series Quiz</h1>
+        <form id="user-info-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <button type="submit">Start Quiz</button>
+        </form>
+    </div>
+    <div id="category-selector" style="display:none;">
+        <label for="web-series">Choose a Web Series:</label>
+        <select id="web-series">
+            <option value="">Select a Series</option>
+            <option value="all">All</option>
+            <option value="money-heist">Money Heist</option>
+            <option value="game-of-thrones">Game of Thrones</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+    <div id="quiz-container" style="display:none;">
+        <!-- Quiz questions will be injected here -->
+    </div>
+    <button id="next-button" style="display:none;">Next Question</button>
+    <div id="result" style="display:none;">
+        <p id="score"></p>
+        <button id="share-button" style="display:none;">Share Score</button>
+    </div>
+</div>
+<!-- Add this in your HTML where you want the timer to display -->
+
+
+<script>
+  
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userInfoForm = document.getElementById('user-info-form');
+    const userInfoSection = document.getElementById('user-info');
+    const categorySelector = document.getElementById('category-selector');
+    const quizContainer = document.getElementById('quiz-container');
+    const nextButton = document.getElementById('next-button');
+    const scoreElement = document.getElementById('score');
+    const shareButton = document.getElementById('share-button');
+
+    const questions = {
+        all: [
+            {
+                question: "Which series features a group of friends who are all in a cafe?",
+                options: ["Friends", "Seinfeld", "How I Met Your Mother", "The Office"],
+                answer: "Friends"
+            },
+            {
+                question: "In which series does a character named Walter White appear?",
+                options: ["Breaking Bad", "Better Call Saul", "Ozark", "Narcos"],
+                answer: "Breaking Bad"
+            }
+        ],
+        'money-heist': [
+            {
+                question: "What is the name of the character who plans the heist in Money Heist?",
+                options: ["The Professor", "Berlin", "Tokyo", "Rio"],
+                answer: "The Professor"
+            },
+            {
+                question: "Which city is the heist in Money Heist initially set in?",
+                options: ["Madrid", "Barcelona", "Lisbon", "Paris"],
+                answer: "Madrid"
+            }
+        ],
+        'game-of-thrones': [
+            {
+                question: "Who is the youngest Stark child in Game of Thrones?",
+                options: ["Arya", "Sansa", "Bran", "Rickon"],
+                answer: "Rickon"
+            },
+            {
+                question: "What is the name of the continent where most of the action in Game of Thrones takes place?",
+                options: ["Essos", "Westeros", "Sothoryos", "Ulthos"],
+                answer: "Westeros"
+            }
+        ],
+        // Add more web series categories and questions as needed
+    };
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let currentCategory = 'all';
+    let userEmail = '';
+
+    userInfoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        userEmail = document.getElementById('email').value;
+
+        if (name && userEmail) {
+            userInfoSection.style.display = 'none';
+            categorySelector.style.display = 'block';
+        }
+    });
+
+    categorySelector.addEventListener('change', (e) => {
+        currentCategory = e.target.value;
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.style.display = 'block';
+        loadQuestion();
+    });
+
+    function loadQuestion() {
+        const selectedQuestions = questions[currentCategory];
+        if (!selectedQuestions || selectedQuestions.length === 0) {
+            quizContainer.innerHTML = '<p>No questions available for this category.</p>';
+            nextButton.style.display = 'none';
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * selectedQuestions.length);
+        const questionData = selectedQuestions[randomIndex];
+
+        quizContainer.innerHTML = `
+            <h2>${questionData.question}</h2>
+            <div id="options">
+                ${questionData.options.map((option, index) => `
+                    <button class="option">${option}</button>
+                `).join('')}
+            </div>
+        `;
+
+        document.querySelectorAll('.option').forEach(button => {
+            button.addEventListener('click', () => checkAnswer(button.textContent, questionData.answer));
+        });
+
+        quizContainer.style.display = 'block';
+    }
+
+    function checkAnswer(selectedOption, correctAnswer) {
+        if (selectedOption === correctAnswer) {
+            score++;
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions[currentCategory].length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizContainer.innerHTML = '';
+        nextButton.style.display = 'none';
+        scoreElement.textContent = `Your score: ${score}/${questions[currentCategory].length}`;
+        document.getElementById('result').style.display = 'block';
+
+        // Set up share button
+        shareButton.addEventListener('click', () => {
+            const subject = 'Your Quiz Score';
+            const body = `Hello,\n\nThank you for taking the quiz! Your score is ${score}/${questions[currentCategory].length}.\n\nBest regards,\nThe Quiz Team`;
+            window.location.href = `mailto:${userEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        });
+        shareButton.style.display = 'block';
+    }
+
+    nextButton.addEventListener('click', loadQuestion);
+});
+
+
+</script></body>
+</html>
