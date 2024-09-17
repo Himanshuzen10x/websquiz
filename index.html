@@ -6,61 +6,130 @@
     <title>Web Series Quiz</title>
     <link rel="stylesheet" href="style.css">
     <style>
-      body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    width: 80%;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-#quiz-container {
-    margin-bottom: 20px;
-}
-
-button {
-    display: block;
+        #options button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+    margin: 5px 0;
+    background-color: #007bff; /* Button background color */
+    color: black; /* Text color set to black */
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
-    font-size: 16px;
 }
 
-button:hover {
+#options button:hover {
     background-color: #0056b3;
+    color: white; /* Optional: Text color on hover */
 }
 
-#result {
-    text-align: center;
-    margin-top: 20px;
-}
-#category-selector {
-    margin-bottom: 20px;
-}
-
-#category-selector select {
-    padding: 10px;
-    font-size: 16px;
-}
-
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #e0e0e0, #ffffff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #user-info, #category-selector, #quiz-container, #result {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            margin: 10px;
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 700;
+        }
+        input[type="text"], input[type="email"] {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        button:focus {
+            outline: none;
+        }
+        #options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            margin: 8px 0;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .option:hover {
+            background-color: #e2e6ea;
+            transform: scale(1.02);
+        }
+        #score {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #share-button {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            #user-info, #category-selector, #quiz-container, #result {
+                padding: 20px;
+            }
+            button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -81,6 +150,9 @@ button:hover {
             <option value="">Select a Series</option>
             <option value="all">All</option>
             <option value="money-heist">Money Heist</option>
+            <option value="sacred-games">Sacred Games</option>
+            <option value="mirzapur">Mirzapur</option>
+            <option value="delhi-crime">Delhi Crime</option>
             <option value="game-of-thrones">Game of Thrones</option>
             <!-- Add more options as needed -->
         </select>
@@ -100,7 +172,7 @@ button:hover {
 <script>
   
 
-document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const userInfoForm = document.getElementById('user-info-form');
     const userInfoSection = document.getElementById('user-info');
     const categorySelector = document.getElementById('category-selector');
@@ -134,6 +206,88 @@ document.addEventListener('DOMContentLoaded', () => {
                 answer: "Madrid"
             }
         ],
+        'sacred-games': [
+            {
+                question: "Who plays the role of Sartaj Singh in Sacred Games?",
+                options: ["Saif Ali Khan", "Nawazuddin Siddiqui", "Anurag Kashyap", "Pankaj Tripathi"],
+                answer: "Saif Ali Khan"
+            },
+            {
+                question: "What is the name of the gangster who is the central antagonist in Sacred Games?",
+                options: ["Ganesh Gaitonde", "Shahid Khan", "Nawazuddin Siddiqui", "Sartaj Singh"],
+                answer: "Ganesh Gaitonde"
+            },
+            {
+                question: "Which city is Sacred Games primarily set in?",
+                options: ["Mumbai", "Delhi", "Bangalore", "Kolkata"],
+                answer: "Mumbai"
+            },
+            {
+                question: "Who is the author of the book 'Sacred Games' that the series is based on?",
+                options: ["Vikram Chandra", "Chetan Bhagat", "Aravind Adiga", "Ruskin Bond"],
+                answer: "Vikram Chandra"
+            },
+            {
+                question: "What is the profession of Sartaj Singh in Sacred Games?",
+                options: ["Police Officer", "Lawyer", "Journalist", "Doctor"],
+                answer: "Police Officer"
+            }
+        ],
+        'mirzapur': [
+            {
+                question: "Who plays the role of Kaleen Bhaiya in Mirzapur?",
+                options: ["Pankaj Tripathi", "Ali Fazal", "Vikrant Massey", "Rajkummar Rao"],
+                answer: "Pankaj Tripathi"
+            },
+            {
+                question: "What is the name of the town where Mirzapur is set?",
+                options: ["Mirzapur", "Varanasi", "Kanpur", "Allahabad"],
+                answer: "Mirzapur"
+            },
+            {
+                question: "Which family is central to the plot of Mirzapur?",
+                options: ["The Tripathi family", "The Singh family", "The Sharma family", "The Yadav family"],
+                answer: "The Tripathi family"
+            },
+            {
+                question: "Who is the character Guddu Pandit played by in Mirzapur?",
+                options: ["Ali Fazal", "Pankaj Tripathi", "Vikrant Massey", "Shweta Tripathi"],
+                answer: "Ali Fazal"
+            },
+            {
+                question: "What is the main business of Kaleen Bhaiya in Mirzapur?",
+                options: ["Gun Trade", "Drugs", "Land Dealings", "Education"],
+                answer: "Gun Trade"
+            }
+        ],
+        'delhi-crime': [
+            {
+                question: "What real-life event is Delhi Crime based on?",
+                options: ["Nirbhaya Gang Rape Case", "2008 Mumbai Attacks", "Delhi Riots 2020", "Delhi Metro Accident"],
+                answer: "Nirbhaya Gang Rape Case"
+            },
+            {
+                question: "Who plays the role of DCP Vartika Chaturvedi in Delhi Crime?",
+                options: ["Shefali Shah", "Richa Chadha", "Kangana Ranaut", "Vidya Balan"],
+                answer: "Shefali Shah"
+            },
+            {
+                question: "Which police department is featured prominently in Delhi Crime?",
+                options: ["Delhi Police", "Mumbai Police", "Kolkata Police", "Bangalore Police"],
+                answer: "Delhi Police"
+            },
+            {
+                question: "What is the primary focus of Delhi Crime?",
+                options: ["Investigation of a high-profile rape case", "Terrorist attack", "Political corruption", "Corporate fraud"],
+                answer: "Investigation of a high-profile rape case"
+            },
+            {
+                question: "What is the release platform for Delhi Crime?",
+                options: ["Netflix", "Amazon Prime Video", "Hotstar", "SonyLiv"],
+                answer: "Netflix"
+            }
+        ],
+
         'game-of-thrones': [
             {
                 question: "Who is the youngest Stark child in Game of Thrones?",
@@ -144,11 +298,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 question: "What is the name of the continent where most of the action in Game of Thrones takes place?",
                 options: ["Essos", "Westeros", "Sothoryos", "Ulthos"],
                 answer: "Westeros"
+            },
+            {
+                question: "What is the name of Jon Snow's direwolf?",
+                options: ["Ghost", "Nymeria", "Summer", "Shaggydog"],
+                answer: "Ghost"
+            },
+            {
+                question: "Who is known as the 'Mother of Dragons'?",
+                options: ["Cersei Lannister", "Sansa Stark", "Daenerys Targaryen", "Margaery Tyrell"],
+                answer: "Daenerys Targaryen"
+            },
+            {
+                question: "Which house has the motto 'Winter is Coming'?",
+                options: ["House Lannister", "House Stark", "House Baratheon", "House Targaryen"],
+                answer: "House Stark"
+            },
+            {
+                question: "Who is the Night King?",
+                options: ["The leader of the White Walkers", "The king of the North", "The last Targaryen", "The head of House Lannister"],
+                answer: "The leader of the White Walkers"
+            },
+            {
+                question: "Which character is known for the phrase 'Chaos isn’t a pit. Chaos is a ladder.'?",
+                options: ["Petyr Baelish", "Tyrion Lannister", "Varys", "Jaime Lannister"],
+                answer: "Petyr Baelish"
+            },
+            {
+                question: "What is the name of the capital city of the Seven Kingdoms?",
+                options: ["King's Landing", "Winterfell", "The Eyrie", "Dragonstone"],
+                answer: "King's Landing"
+            },
+            {
+                question: "Who kills Joffrey Baratheon?",
+                options: ["Olenna Tyrell", "Cersei Lannister", "Tyrion Lannister", "Littlefinger"],
+                answer: "Olenna Tyrell"
+            },
+            {
+                question: "What is the name of Arya Stark's sword?",
+                options: ["Needle", "Ice", "Longclaw", "Oathkeeper"],
+                answer: "Needle"
             }
-        ],
+            
+        ]
         // Add more web series categories and questions as needed
     };
 
+    let usedQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let currentCategory = 'all';
@@ -169,25 +365,42 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCategory = e.target.value;
         currentQuestionIndex = 0;
         score = 0;
+        usedQuestions = [];
         nextButton.style.display = 'block';
         loadQuestion();
     });
 
-    function loadQuestion() {
+    function getRandomQuestion() {
         const selectedQuestions = questions[currentCategory];
         if (!selectedQuestions || selectedQuestions.length === 0) {
             quizContainer.innerHTML = '<p>No questions available for this category.</p>';
             nextButton.style.display = 'none';
-            return;
+            return null;
         }
 
-        const randomIndex = Math.floor(Math.random() * selectedQuestions.length);
-        const questionData = selectedQuestions[randomIndex];
+        const availableQuestions = selectedQuestions.filter(q => !usedQuestions.includes(q));
+        if (availableQuestions.length === 0) {
+            alert('No more questions available.');
+            return null;
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+        const question = availableQuestions[randomIndex];
+        usedQuestions.push(question);
+        return question;
+    }
+
+    function loadQuestion() {
+        const questionData = getRandomQuestion();
+        if (!questionData) {
+            showResult();
+            return;
+        }
 
         quizContainer.innerHTML = `
             <h2>${questionData.question}</h2>
             <div id="options">
-                ${questionData.options.map((option, index) => `
+                ${questionData.options.map(option => `
                     <button class="option">${option}</button>
                 `).join('')}
             </div>
@@ -204,8 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedOption === correctAnswer) {
             score++;
         }
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions[currentCategory].length) {
+        if (usedQuestions.length < questions[currentCategory].length) {
             loadQuestion();
         } else {
             showResult();
@@ -213,19 +425,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showResult() {
-        quizContainer.innerHTML = '';
-        nextButton.style.display = 'none';
-        scoreElement.textContent = `Your score: ${score}/${questions[currentCategory].length}`;
-        document.getElementById('result').style.display = 'block';
+    quizContainer.innerHTML = '';
+    nextButton.style.display = 'none';
+    scoreElement.textContent = `Your score: ${score}/${questions[currentCategory].length}`;
+    document.getElementById('result').style.display = 'block';
 
-        // Set up share button
-        shareButton.addEventListener('click', () => {
-            const subject = 'Your Quiz Score';
-            const body = `Hello,\n\nThank you for taking the quiz! Your score is ${score}/${questions[currentCategory].length}.\n\nBest regards,\nThe Quiz Team`;
-            window.location.href = `mailto:${userEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        });
-        shareButton.style.display = 'block';
-    }
+    // Get current date and time
+    const now = new Date();
+    const dateString = now.toLocaleDateString();
+    const timeString = now.toLocaleTimeString();
+    const userName = document.getElementById('name').value;
+
+    // Set up share button
+    shareButton.addEventListener('click', () => {
+        const subject = 'Your Quiz Score';
+        const body = `Hello,\n\nThank you for taking the quiz!\n\nDetails:\n- Name: ${userName}\n- Date: ${dateString}\n- Time: ${timeString}\n- Your score: ${score}/${questions[currentCategory].length}\n\nBest regards,\nThe Quiz Team`;
+        window.location.href = `mailto:${userEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+    shareButton.style.display = 'block';
+}
+
 
     nextButton.addEventListener('click', loadQuestion);
 });
