@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,20 +205,6 @@ margin-top: 3%;
 .share-button:hover {
     background-color: #218838;
 }
-.reset-button {
-    background-color: #dc3545; /* Red background for the reset button */
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 60%;
-    font-size: 1em;
-}
-
-.reset-button:hover {
-    background-color: #c82333; /* Darker red on hover */
-}
 
     </style>
 </head>
@@ -255,7 +240,6 @@ margin-top: 3%;
                 <div id="answers" class="answers-container"></div>
                 <button id="skipButton"  class="skip-button" onclick="skipQuestion()">Skip Question</button>
             </div>
-            <button id="resetButton" class="reset-button" style="display: none;" onclick="resetQuiz()">Reset Quiz</button>
 
             <p id="score" class="score-text"></p>
             <button id="shareButton" onclick="sendEmail()" class="share-button" style="display: none;">Share Score via Email</button>
@@ -382,24 +366,39 @@ function playBackgroundSound(series) {
         backgroundSound.play();
     }
 }
-
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
 function startQuiz() {
     currentQuestion = 0;
     score = 0;
-    questions = seriesData[selectedSeries].questions;
+    // Shuffle questions first
+    shuffle(seriesData[selectedSeries].questions);
+    // Limit to 10 questions per series
+    questions = seriesData[selectedSeries].questions.slice(0, 10);
     document.getElementById('shareButton').style.display = 'none'; // Hide the share button
     loadQuestion();
 }
+
+function shuffleQuestions(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+}
+
 
 let countdown;  // To store the setInterval for the countdown
 
 function loadQuestion() {
     if (currentQuestion >= questions.length) {
         document.getElementById('questionContainer').innerHTML = `<p>Quiz complete! Your score: ${score}/${questions.length}</p>`;
-        clearInterval(countdown); // Clear the timer
         document.getElementById('shareButton').style.display = 'block'; // Show the share button
-        document.getElementById('resetButton').style.display = 'block'; // Show the reset button
+        clearInterval(countdown);  // Clear the timer when quiz ends
         return;
     }
 
@@ -417,7 +416,6 @@ function loadQuestion() {
     // Start the countdown for the current question
     startCountdown(15);  // Start countdown from 15 seconds (adjust as needed)
 }
-
 
 function startCountdown(seconds) {
     let timeLeft = seconds;
@@ -452,20 +450,6 @@ function startCountdown(seconds) {
         }
     }, 1000);  // Update every second
 }
-
-function resetQuiz() {
-    currentQuestion = 0; // Reset the question index
-    score = 0; // Reset the score
-    document.getElementById('userForm').style.display = 'none'; // Hide the user form
-    document.getElementById('quizSection').style.display = 'block'; // Show the quiz section
-    document.getElementById('shareButton').style.display = 'none'; // Hide share button
-    document.getElementById('resetButton').style.display = 'none'; // Hide reset button
-    document.getElementById('timer').textContent = ''; // Clear timer
-    document.getElementById('answers').innerHTML = ''; // Clear answers
-    document.getElementById('series').selectedIndex = 0; // Reset the series selection to the first option
-    selectedSeries = 'all'; // Reset the selected series
-}
-
 
 
 
@@ -503,8 +487,9 @@ function sendEmail() {
 }
 
 function sendEmail() {
+    const recipientEmail = 'himanshukhare007@outlook.com';
     let seriesName = selectedSeries.charAt(0).toUpperCase() + selectedSeries.slice(1).replace(/([A-Z])/g, ' $1'); // Format the series name
-    let mailtoLink = `mailto:${userEmail}?subject=Quiz Score for ${seriesName}&body=Hi ${userName},%0D%0A%0D%0AYou scored ${score} in the ${seriesName} quiz!`;
+    let mailtoLink = `mailto:${recipientEmail}?subject=Quiz Score for ${seriesName}&body=Hi ${userName},%0D%0A%0D%0AYou scored ${score} in the ${seriesName} quiz!`;
     window.location.href = mailtoLink;
 }
 
