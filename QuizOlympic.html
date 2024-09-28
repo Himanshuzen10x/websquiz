@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>olympic Quiz</title>
+    <link rel="stylesheet" href="style.css">
+   
+</head>
+<body>
+    
+    <div class="container">
+        <img src="https://i.pinimg.com/originals/c0/11/a5/c011a51ad84937936e9af692d95b2e2a.png" alt="Description of Image" class="small-image">
+        <h1>Olympic Brainstorm</h1>
+        <form id="userForm" class="form">
+            <input type="text" id="name" placeholder="Enter your name" required>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="submit">Start Quiz</button>
+        </form>
+
+        <div id="quizSection" class="quiz-section">
+            <div class="series-select">
+                <label for="series">Choose a Catagory:</label>
+                <select id="series" onchange="selectSeries()">
+                    <option value="all">All</option>
+                    <option value="History">History</option>
+                    <option value="Athletes">Athletes</option>
+                    <option value="Sports&Events">Sports&Events</option>
+                    <option value="Olympic Records">Olympic Records</option>
+
+                </select>
+            </div>
+
+            <div id="questionContainer" class="question-container">
+                <p id="question" class="question-text"></p>
+                <div id="timerContainer">
+                    <div id="timerBar"></div>
+                    <div id="timerText"></div>
+                </div>
+                
+                <div id="answers" class="answers-container"></div>
+                <button id="skipButton"  class="skip-button" onclick="skipQuestion()">Skip Question</button>
+            </div>
+
+            <p id="score" class="score-text"></p>
+            <button id="shareButton" onclick="sendEmail()" class="share-button" style="display: none;">Share Score via Email</button>
+            <button id="twitterShareButton" onclick="shareOnTwitter()" class="share-button" style="display: none;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Twitter_new_X_logo.png" alt="Twitter Icon" class="icon"> Share Score on X
+            </button>
+            <button id="facebookShareButton" onclick="shareOnFacebook()" class="share-button" style="display: none;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Facebook_Logo_2023.png" alt="Facebook Icon" class="icon"> Share Score on Facebook
+            </button>
+            
+
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
